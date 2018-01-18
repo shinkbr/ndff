@@ -1243,8 +1243,7 @@ static void setup_detection(u_int16_t thread_id) {
     memset(&ndpi_thread_info[thread_id], 0, sizeof(ndpi_thread_info[thread_id]));
     
     // init global detection structure
-    ndpi_thread_info[thread_id].ndpi_struct = ndpi_init_detection_module(detection_tick_resolution,
-                                                                         malloc_wrapper, free_wrapper, NULL);
+    ndpi_thread_info[thread_id].ndpi_struct = ndpi_init_detection_module();
     if(ndpi_thread_info[thread_id].ndpi_struct == NULL) {
         output(LOG_ERR, "%s\n", "[ERROR] global structure initialization failed");
         exit(-1);
