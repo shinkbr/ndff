@@ -1533,7 +1533,7 @@ static void pcap_packet_callback(u_char *args,
     /* --- Ethernet II header --- */
     const struct ndpi_ethhdr *ethernet_2;
     /* --- LLC header --- */
-    const struct ndpi_llc_header *llc;
+    const struct ndpi_llc_header_snap *llc;
     
     /* --- Cisco HDLC header --- */
     const struct ndpi_chdlc *chdlc;
@@ -1637,7 +1637,7 @@ datalink_check:
             if(pyld_eth_len != 0) {
                 /* check for LLC layer with SNAP extension */
                 if(packet[ip_offset] == SNAP) {
-                    llc = (struct ndpi_llc_header *)(&packet[ip_offset]);
+                    llc = (struct ndpi_llc_header_snap *)(&packet[ip_offset]);
                     type = llc->snap.proto_ID;
                     ip_offset += + 8;
                 }
@@ -1676,12 +1676,12 @@ datalink_check:
                 break;
             
             /* Check ether_type from LLC */
-            llc = (struct ndpi_llc_header*)(packet + eth_offset + wifi_len + radio_len);
+            llc = (struct ndpi_llc_header_snap*)(packet + eth_offset + wifi_len + radio_len);
             if(llc->dsap == SNAP)
                 type = ntohs(llc->snap.proto_ID);
             
             /* Set IP header offset */
-            ip_offset = wifi_len + radio_len + sizeof(struct ndpi_llc_header) + eth_offset;
+            ip_offset = wifi_len + radio_len + sizeof(struct ndpi_llc_header_snap) + eth_offset;
             break;
             
         case DLT_RAW:
