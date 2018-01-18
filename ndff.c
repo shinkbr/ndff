@@ -1276,7 +1276,7 @@ static void terminate_detection(u_int16_t thread_id) {
         ndpi_thread_info[thread_id].ndpi_flows_root[i] = NULL;
     }
     
-    ndpi_exit_detection_module(ndpi_thread_info[thread_id].ndpi_struct, free_wrapper);
+    ndpi_exit_detection_module(ndpi_thread_info[thread_id].ndpi_struct);
 }
 
 /* ***************************************************** */
