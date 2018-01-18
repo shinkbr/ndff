@@ -1178,7 +1178,7 @@ static struct ndpi_flow *get_ndpi_flow6(u_int16_t thread_id,
     iph.version = 4;
     iph.saddr = iph6->ip6_src.u6_addr.u6_addr32[2] + iph6->ip6_src.u6_addr.u6_addr32[3];
     iph.daddr = iph6->ip6_dst.u6_addr.u6_addr32[2] + iph6->ip6_dst.u6_addr.u6_addr32[3];
-    iph.protocol = iph6->ip6_ctlun.ip6_un1.ip6_un1_nxt;
+    iph.protocol = iph6->ip6_hdr.ip6_un1_nxt;
     
     if(iph.protocol == 0x3C /* IPv6 destination option */) {
         u_int8_t *options = (u_int8_t*)iph6 + sizeof(const struct ndpi_ipv6hdr);
@@ -1188,7 +1188,7 @@ static struct ndpi_flow *get_ndpi_flow6(u_int16_t thread_id,
     
     return(get_ndpi_flow(thread_id, 6, vlan_id, &iph, iph6, ip_offset,
                          sizeof(struct ndpi_ipv6hdr),
-                         ntohs(iph6->ip6_ctlun.ip6_un1.ip6_un1_plen),
+                         ntohs(iph6->ip6_hdr.ip6_un1_plen),
                          tcph, udph, sport, dport,
                          src, dst, proto, payload, payload_len, src_to_dst_direction));
 }
@@ -1766,7 +1766,7 @@ iph_check:
         }
     } else if(iph->version == 6) {
         iph6 = (struct ndpi_ipv6hdr *)&packet[ip_offset];
-        proto = iph6->ip6_ctlun.ip6_un1.ip6_un1_nxt;
+        proto = iph6->ip6_hdr.ip6_un1_nxt;
         ip_len = sizeof(struct ndpi_ipv6hdr);
         
         if(proto == 0x3C /* IPv6 destination option */) {
